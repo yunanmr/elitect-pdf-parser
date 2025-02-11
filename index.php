@@ -1,21 +1,40 @@
 <?php
 require 'vendor/autoload.php';
-
 use Spatie\PdfToText\Pdf;
-$str = Pdf::getText('EFI241107334-001.pdf');
+
 $data = [];
+$str = Pdf::getText('EFI241107334-001.pdf');
+$str = str_replace("\n", " ", $str);
 
-// preg_match('/Mode Code\s*:\s*(.*?)\s*Probe/', $str, $device);
-// print_r($device);die;
-
+// data log temperature
 preg_match_all('/(\d{2}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}) (\d+\.\d+)/', $str, $logs);
 foreach ($logs[0] as $index => $match) {
-    $log1 = explode(' ', $logs[0][$index]);
+    $log = explode(' ', $logs[0][$index]);
+    $date = DateTime::createFromFormat('y/m/d', $log[0])->format('Y-m-d');
+    $time = $log[1];
+    $temp = $log[2];
     $data[$index] = [
-        'date' => $log1[0],
-        'time' => $log1[1],
-        'temp' => $log1[2]
+        'timestamp' => strtotime("$date $time"),
+        'date' => $date,
+        'time' => $time,
+        'temp' => $temp
     ];
 }
 
-echo json_encode($data);
+// sort by timestamp (ascending)
+usort($data, function ($a, $b) {
+    return $a['timestamp'] <=> $b['timestamp'];
+});
+
+// device info
+preg_match_all('/Mode Code\s*:\s*(.*?)\s*Probe/', $str, $device, PREG_SET_ORDER, 0);
+$device_info = explode(' ', $device[0][1]);
+$response = [
+    'code' => $device_info[0],
+    'serial' => $device_info[1],
+    'mode' => $device_info[2],
+    'data' => $data
+];
+
+header('Content-type: application/json');
+echo json_encode($response);
