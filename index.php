@@ -9,12 +9,13 @@ $data = [];
 // print_r($device);die;
 
 preg_match_all('/(\d{2}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}) (\d+\.\d+)/', $str, $logs);
+// echo json_encode($logs);die;
 foreach ($logs[0] as $index => $match) {
-    $log1 = explode(' ', $logs[1][$index]);
+    $log1 = explode(' ', $logs[0][$index]);
     $data[$index] = [
         'date' => $log1[0],
         'time' => $log1[1],
-        'temp' => $logs[2][$index]
+        'temp' => $log1[2]
     ];
 }
 
