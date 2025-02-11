@@ -2,6 +2,21 @@
 require 'vendor/autoload.php';
 use Spatie\PdfToText\Pdf;
 
+function array2csv(array &$array)
+{
+    if (count($array) == 0) {
+        return null;
+    }
+    ob_start();
+    $df = fopen("php://output", 'w');
+    fputcsv($df, array_keys(reset($array)));
+    foreach ($array as $row) {
+        fputcsv($df, $row);
+    }
+    fclose($df);
+    return ob_get_clean();
+}
+
 $data = [];
 $str = Pdf::getText('EFI241107334-001.pdf');
 $str = str_replace("\n", " ", $str);
@@ -37,5 +52,30 @@ $response = [
     'data' => $data
 ];
 
+// save to json
+file_put_contents('EFI241107334-001.json', json_encode($response));
+
+// save to csv
+$path = 'EFI241107334-001.csv';
+$fp = fopen($path, 'w');
+$header = [
+    'timestamp',
+    'date',
+    'time',
+    'temp',
+    'device_code',
+    'serial_number',
+    'mode_code'
+];
+fputcsv($fp, $header);
+foreach ($data as $row) {
+    $row[$header[4]] = $device_info[0];
+    $row[$header[5]] = $device_info[1];
+    $row[$header[6]] = $device_info[2];
+    fputcsv($fp, $row);
+}
+fclose($fp);
+
+// print json response
 header('Content-type: application/json');
 echo json_encode($response);
