@@ -30,9 +30,10 @@ usort($data, function ($a, $b) {
 preg_match_all('/Mode Code\s*:\s*(.*?)\s*Probe/', $str, $device, PREG_SET_ORDER, 0);
 $device_info = explode(' ', $device[0][1]);
 $response = [
-    'code' => $device_info[0],
-    'serial' => $device_info[1],
-    'mode' => $device_info[2],
+    'device_code' => $device_info[0],
+    'serial_number' => $device_info[1],
+    'mode_code' => $device_info[2],
+    'data_point' => count($data),
     'data' => $data
 ];
 

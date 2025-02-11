@@ -30,27 +30,34 @@ Sample results for Elitech data logger
 
 ```bash
 {
-  "code": "RC-5+",
-  "serial": "EFI241107334",
-  "mode": "TLC30A08B",
+  "device_code": "RC-5+",
+  "serial_number": "EFI241107334",
+  "mode_code": "TLC30A08B",
+  "data_point": 712,
   "data": [
     {
-      "timestamp": 1739265882,
+      "timestamp": 1739302069,
       "date": "2025-02-11",
-      "time": "09:24:42",
-      "temp": "27.9"
+      "time": "19:27:49",
+      "temp": "30.8"
     },
     {
-      "timestamp": 1739265892,
+      "timestamp": 1739302079,
       "date": "2025-02-11",
-      "time": "09:24:52",
-      "temp": "27.9"
+      "time": "19:27:59",
+      "temp": "30.8"
     },
     {
-      "timestamp": 1739265902,
+      "timestamp": 1739302089,
       "date": "2025-02-11",
-      "time": "09:25:02",
-      "temp": "27.9"
+      "time": "19:28:09",
+      "temp": "30.8"
+    },
+    {
+      "timestamp": 1739302099,
+      "date": "2025-02-11",
+      "time": "19:28:19",
+      "temp": "30.8"
     }
   ]
 }
